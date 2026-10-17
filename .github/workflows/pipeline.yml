@@ -11,8 +11,8 @@ jobs:
           path: promo
       - uses: actions/checkout@v4
         with:
-          repository: alexk202/MAQS_Way
-          ref: v0.2
+          repository: alexk202/maqs-way
+          ref: main  # replay/scoreboard/e2e live on main; pinned tag lands with next canon release
           path: _maqs_way
       - run: python3 -m pip install --quiet "jsonschema>=4,<5"
       - run: bash promo/run_all.sh --maqs-way=$GITHUB_WORKSPACE/_maqs_way
