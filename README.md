@@ -1,4 +1,4 @@
-# maqs-way-promotion
+# maqs-way-evidence
 
 Companion repo for [MAQS-Way v0.2](https://github.com/alexk202/maqs-way) — the megaphone, not the canon. Canon (SPEC, standard, gates) lives in the main repo; this repo holds the artifacts that make it visible and testable.
 
