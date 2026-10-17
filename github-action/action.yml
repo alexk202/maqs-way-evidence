@@ -1,0 +1,57 @@
+name: "MAQS-Way Audit"
+description: "Replay MAQS-Way canon self-checks. Release v0.2 = rules/audit code; model way-v0.1.3 (omps-0.1.0+way-v0.1.3) = frozen data-model version checked at runtime."
+branding:
+  icon: "shield"
+  color: "green"
+inputs:
+  maqs_way_ref:
+    description: "MAQS_Way git ref: rules release to replay. Use tag or SHA (e.g. v0.2), NOT a branch — branches break reproducibility."
+    required: false
+    default: "v0.2"
+  command:
+    description: "Audit subcommand: all|schema|manifest|lint|coverage|namespaces|pin"
+    required: false
+    default: "all"
+  format:
+    description: "text|json (json writes audit-output.json for artifact upload)"
+    required: false
+    default: "text"
+  path:
+    description: "Working subdir of consumer repo (audit itself runs on canon checkout; your self-manifest stays declared)."
+    required: false
+    default: "."
+outputs:
+  verdict:
+    description: "GATE GREEN or GATE RED (canon self-check result, always written even on RED)"
+    value: ${{ steps.audit.outputs.verdict }}
+  report_path:
+    description: "Path to audit output file (audit-output.txt/json)"
+    value: ${{ steps.audit.outputs.report_path }}
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout MAQS-Way canon (pinned rules)
+      uses: actions/checkout@v4
+      with:
+        repository: alexk202/MAQS_Way
+        ref: ${{ inputs.maqs_way_ref }}
+        path: _maqs_way
+    - name: Install audit dependency (stdlib + jsonschema>=4,<5 only)
+      shell: bash
+      run: python3 -m pip install --quiet "jsonschema>=4,<5"
+    - name: Run audit + real model-version check
+      id: audit
+      shell: bash
+      working-directory: ${{ inputs.path }}
+      run: |
+        if [ "${{ inputs.format }}" = "json" ]; then OUT="audit-output.json"; else OUT="audit-output.txt"; fi
+        set +e
+        python3 "${GITHUB_WORKSPACE}/_maqs_way/schemas/maqs_way_audit.py" "${{ inputs.command }}" --format "${{ inputs.format }}" | tee "$OUT"
+        RC=${PIPESTATUS[0]}
+        # Real check (not echo): model frozen at way-v0.1.3, release stamp v0.2.0. Drift = RED.
+        python3 -c "import json; v=json.load(open('${GITHUB_WORKSPACE}/_maqs_way/conformance/valid/001-minimal-preference.omps.json')); assert v['schema_version']=='omps-0.1.0+way-v0.1.3', v['schema_version']; s=json.load(open('${GITHUB_WORKSPACE}/_maqs_way/maqs-way-standard.json')); assert s['version']=='0.2.0', s['version']; print('model+release pin OK: omps-0.1.0+way-v0.1.3 / 0.2.0')"
+        RC2=$?
+        if [ $RC -eq 0 ] && [ $RC2 -eq 0 ]; then VERDICT="GATE GREEN"; FINAL=0; else VERDICT="GATE RED"; FINAL=1; fi
+        echo "verdict=$VERDICT" >> "$GITHUB_OUTPUT"
+        echo "report_path=$OUT" >> "$GITHUB_OUTPUT"
+        exit $FINAL

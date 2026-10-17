@@ -1,0 +1,5 @@
+# maqs_way_promotion_pipeline — core
+
+Satellite packaging repo for MAQS-Way v0.2. Canon lives in sibling `MAQS_Way/` (SPEC.md v0.2, `maqs-way-standard.json` v0.2.0, data model `way-v0.1.3` frozen as `omps-0.1.0+way-v0.1.3`, audit core MAQS v1.6). This repo NEVER duplicates canon logic; it derives from it.
+Map: `cheatsheets/` (P1–P8 + 3 audit patterns) → `evaluator/` (static self-audit → maqs-manifest.json) → `github-action/` (replays canon gates) → `gaps/` (open-gap templates) → `references/` (langchain/llamaindex/crewai skeletons) → `rfc/` (RFC skeleton) → `outreach/` (EN drafts, manual post only) → `negative-red/` (RED self-test) → `proposals/` (canon-package drafts, NOT applied).
+Invariants: every artifact pins versions; evaluator output is `status:self-declared, executed:false-or-ran` (never proof); `declared` vs `executed` never conflated; outreach `drafts only, do not auto-post`; canon edits need owner sanction + signature (see `mem:conventions` for gate rules, `mem:task_completion` for check command).

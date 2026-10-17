@@ -1,0 +1,25 @@
+[
+  {
+    "id": "B4",
+    "requirement": "EXAMPLE: multi-store write is transactional or compensable",
+    "maqs": "B4 [IMP]",
+    "rules": [],
+    "known_gap": true,
+    "owner": "SPEC §2.5",
+    "closes_in": "v0.3 (write atomicity/compensation requirement)",
+    "adjacent": ["P6"],
+    "note": "P6 covers format versioning, not atomicity. Adjacent, not covering.",
+    "retarget_note": "moved v0.2->v0.3 by release decision, no silent rollover"
+  },
+  {
+    "id": "E10",
+    "requirement": "EXAMPLE: assembly rule pending canonization",
+    "maqs": "E10",
+    "rules": [],
+    "known_gap": true,
+    "owner": "SPEC §2.4",
+    "closes_in": "v0.3 canonization (owner signature)",
+    "adjacent": ["P1"],
+    "note": "Formulation exists, canon signature pending."
+  }
+]

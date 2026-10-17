@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAQS-Way Evaluator v0.2 (static)</title>
+<style>body{font-family:system-ui,sans-serif;max-width:760px;margin:24px auto;padding:0 16px}label{display:block;margin:8px 0}pre{background:#f4f4f4;padding:12px;overflow:auto}button{margin:12px 8px 12px 0}</style>
+</head>
+<body>
+<h1>MAQS-Way Evaluator v0.2</h1>
+<p>Derived self-audit. Canon: <code>SPEC.md</code> v0.2 (rules release), model <code>way-v0.1.3</code> frozen, MAQS v1.6. Output is <b>self-declared, not verified</b> — never executed, never a green proof. Semantics: <code>executed:true</code> = checklist ran to completion here; pass/fail lives only in <code>verdict</code> (a failed run is <code>executed:true + RED</code>). Thresholds below are indicative candidates (reasoning, not measurement).</p>
+<form id="f"></form>
+<button id="gen">Сгенерировать maqs-manifest.json</button>
+<button id="dl" disabled>Скачать</button>
+<pre id="out">{}</pre>
+<script>
+const CHECKS=[
+ // [id, rule, question, {exec, cmd, expect}]
+ // cmd runs from inside a MAQS_Way clone (python3 schemas/...). exec:false = no
+ // executable yet — named debt, never a fake command.
+ ["P1","Way:P1","model_output типизирован, confidence_after<=before, ASI06 BLOCK?",
+  {"exec": true, "cmd":"python3 schemas/replay_vectors.py", "expect":"8/8 caught (incl. 002 model_output)"}],
+ ["P2","Way:P2","agent_id binding (OAMP §4.3) + source ref+hash на записи?",
+  {"exec": true, "cmd":"python3 schemas/maqs_way_audit.py schema --format text", "expect":"schema 4/4 (001 no-agent-id = FAIL)"}],
+ ["P3","Way:P3","invalid_at<now → EXPIRED, противоречие сохраняет историю?",
+  {"exec": true, "cmd":"python3 schemas/replay_vectors.py", "expect":"8/8 caught (incl. 009 stale)"}],
+ ["P4a","Way:P4","изоляция векторов проверяется ДО top-k?",
+  {"exec": true, "cmd":"python3 schemas/maqs_way_audit.py replay --format text", "expect":"CAUGHT invalid-003-cross-tenant"}],
+ ["P4b","MAQS:G1","4 фикстуры G1: A/B, wrong scope, readonly, revocation?",
+  {"exec": true, "cmd":"python3 schemas/replay_vectors.py", "expect":"CAUGHT 006+007+008 (G1 fixtures)"}],
+ ["P5a","Way:P5","удаление каскадом 6-tier + tombstone zero PII?",
+  {"exec": true, "cmd":"python3 schemas/replay_vectors.py", "expect":"CAUGHT 004 (residue 99.8%) + 003 tombstone PASS"}],
+ ["P5b","Way:P4","shared-fact: visible_to убран, similarity<0.3?",
+  {"exec": true, "cmd":"python3 schemas/maqs_way_audit.py pin --format text", "expect":"fixture 0.3 == canon 0.3"}],
+ ["P6","Way:P6","restore drill + hash equality, embedding mismatch → fallback?",
+  {"exec": false, "cmd":"named debt: restore drill harness absent (SPEC §6 backlog, MAQS H)", "expect":"declared until v0.3 harness"}],
+ ["P7","Way:P7","export→import round-trip 0 потерь?",
+  {"exec": false, "cmd":"named debt: OMPS roundtrip harness absent (SPEC §6 backlog)", "expect":"declared until v0.3 harness"}],
+ ["P8a","Way:P8","R@5≥0.7, temporal≥0.65, abstention≥0.8 измерены?",
+  {"exec": true, "cmd":"python3 evals/run_way_evals.py", "expect":"NOT-RUN exit 2 (honest: no numbers yet; datasets+model pending)"}],
+ ["P8b","MAQS:F7","stale не вытесняет fresh, feedback guard?",
+  {"exec": true, "cmd":"python3 schemas/replay_vectors.py", "expect":"CAUGHT 009 (confidence_after<=before)"}],
+ ["LOG","LOG-3.4","OTel + Art12, без raw_content/secret/PII в логах?",
+  {"exec": true, "cmd":"python3 schemas/maqs_way_audit.py namespaces --format text", "expect":"namespaces ok (LOG-3.4 resolves)"}]
+];
+const f=document.getElementById('f');
+CHECKS.forEach(([id,rule,q,v])=>{
+ const l=document.createElement('label');
+ const how = v.exec
+   ? `<code>verify: ${v.cmd} → ${v.expect}</code>`
+   : `<code>verify: ${v.cmd} (${v.expect})</code>`;
+ l.innerHTML=`<input type="checkbox" data-id="${id}" data-rule="${rule}" data-v='${JSON.stringify(v).replace(/'/g,"&#39;")}'> <b>${id}</b> [${rule}] — ${q}<br><small>${how}</small>`;
+ f.appendChild(l);
+});
+let last="";
+document.getElementById('gen').onclick=(e)=>{
+ e.preventDefault();
+ const boxes=[...f.querySelectorAll('input')];
+ const checks=boxes.map(b=>({id:b.dataset.id,rule:b.dataset.rule,passed:b.checked,how_to_verify:JSON.parse(b.dataset.v)}));
+ const passed=checks.filter(c=>c.passed).length;
+ last=JSON.stringify({schema_version:"omps-0.1.0+way-v0.1.3",standard:"maqs-way v0.2.0",maqs_core:"v1.6",status:"self-declared",executed:false,self_report:true,checks,summary:{passed,total:checks.length},verdict:passed===checks.length?"SELF-DECLARED GREEN (not verified)":"SELF-DECLARED RED (not verified) — see unchecked"},null,2);
+ document.getElementById('out').textContent=last;
+ document.getElementById('dl').disabled=false;
+};
+document.getElementById('dl').onclick=(e)=>{
+ e.preventDefault();
+ const blob=new Blob([last],{type:"application/json"});
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download="maqs-manifest.json";a.click();
+};
+</script>
+<p>Commands run from inside a MAQS_Way clone. exec:false items are named debts (no harness yet), never fake commands. Output stays <b>self-declared</b> — the manifest carries the verify map so anyone can flip it to executed locally.</p>
+<p>Deploy: любой static host / GitHub Pages, один файл, ноль зависимостей.</p>
+</body>
+</html>

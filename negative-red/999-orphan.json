@@ -1,0 +1,1 @@
+{"id": "orphan-no-manifest", "note": "RED fixture: vector file on disk with no manifest entry must yield GATE-RED orphan. Not part of canon; injected by replay_red.py into a temp copy."}

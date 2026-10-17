@@ -1,0 +1,60 @@
+{
+  "schema": {
+    "passed": 4,
+    "total": 4
+  },
+  "manifest": {
+    "passed": 12,
+    "total": 12
+  },
+  "behavioral": {
+    "status": "declared",
+    "passed": 8,
+    "total": 8
+  },
+  "executed": {
+    "canon-pin": {
+      "passed": 1,
+      "total": 1,
+      "detail": "fixture 0.3 == canon 0.3 (SPEC.md)"
+    }
+  },
+  "namespaces": "ok",
+  "coverage": {
+    "b_gate": "green-with-gap",
+    "c8_gate": "green-with-gap",
+    "gaps": [
+      {
+        "id": "B4",
+        "owner": "SPEC §2.5",
+        "closes_in": "v0.3 (write atomicity/compensation requirement)"
+      },
+      {
+        "id": "recovery_loop_without_diagnosis",
+        "owner": "I11",
+        "closes_in": "1.6a (bridge) → v0.3 canonization (owner signature)"
+      }
+    ]
+  },
+  "vector_status": {
+    "valid-001-minimal-preference": "schema",
+    "valid-002-bitemporal-fact": "schema",
+    "valid-003-deletion-tombstone": "schema",
+    "invalid-001-no-agent-id": "schema",
+    "invalid-002-model-output-as-trusted": "declared",
+    "invalid-003-cross-tenant": "declared",
+    "invalid-004-native-delete-residue": "declared",
+    "invalid-005-shared-fact-visibility-leak": "declared+pin-executed",
+    "invalid-006-wrong-scope-leak": "declared",
+    "invalid-007-readonly-write-block": "declared",
+    "invalid-008-revoked-access-leak": "declared",
+    "invalid-009-stale-overrides-fresh": "declared"
+  },
+  "verdict": "GATE GREEN",
+  "_baseline": {
+    "ts": "2026-10-16T19:10Z",
+    "maqs_way_sha": "25b83a3+spec-manifest(dirty)",
+    "runner": "local",
+    "package": "spec-manifest owner-resolution"
+  }
+}

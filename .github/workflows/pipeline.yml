@@ -1,0 +1,18 @@
+name: pipeline
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: promo
+      - uses: actions/checkout@v4
+        with:
+          repository: alexk202/MAQS_Way
+          ref: v0.2
+          path: _maqs_way
+      - run: python3 -m pip install --quiet "jsonschema>=4,<5"
+      - run: bash promo/run_all.sh --maqs-way=$GITHUB_WORKSPACE/_maqs_way
