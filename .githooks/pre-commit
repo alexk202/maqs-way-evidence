@@ -1,0 +1,4 @@
+#!/bin/sh
+# Wired via: git config core.hooksPath .githooks (see README "Wired check").
+# Single source: the pattern is imported from the canon (maqs-way) name_guard.
+exec python3 "$(dirname "$0")/name_guard.py" pre-commit "$@"
