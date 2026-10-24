@@ -23,9 +23,24 @@ import tempfile
 from pathlib import Path
 
 PIPE = Path(__file__).resolve().parent
-DEFAULT_CANON = PIPE.parent.parent / "MAQS_Way"
-if not DEFAULT_CANON.exists():
-    DEFAULT_CANON = Path("/home/aleksandr/Projects/MAQS_Way")
+# Canon default: a sibling checkout next to this repo (no home paths).
+# Tried in order: $MAQS_WAY, ../maqs-way, ../MAQS_Way; error if none exists.
+_SIBLINGS = ("maqs-way", "MAQS_Way")
+
+
+def default_canon() -> Path:
+    import os
+    env = os.environ.get("MAQS_WAY", "").strip()
+    for cand in ([env] if env else []) + [PIPE.parent.parent / s for s in _SIBLINGS]:
+        p = Path(cand)
+        if (p / "schemas" / "maqs_way_audit.py").is_file():
+            return p
+    sys.exit("ERROR: canon (maqs-way) not found. Set MAQS_WAY or pass --maqs-way PATH.\n"
+             f"  tried: env MAQS_WAY={env or '<unset>'}, "
+             + ", ".join(str(PIPE.parent.parent / s) for s in _SIBLINGS))
+
+
+DEFAULT_CANON = default_canon()
 
 
 def run(cmd, **kw):
