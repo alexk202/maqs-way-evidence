@@ -1,4 +1,4 @@
-# Pattern: Graphiti Invalidation (P3 exemplary)
+# Pattern: Graphiti Invalidation (P3: static implementation evidence)
 
 Source: `MAQS_Way/docs/audits/graphiti-way-audit.md`, code `getzep/graphiti @ aca3693` (2026-10-15). Example only, NOT canon. P3 verdict: PARTIAL (invalidation covered).
 

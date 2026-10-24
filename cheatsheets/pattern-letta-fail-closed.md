@@ -1,4 +1,4 @@
-# Pattern: Letta Fail-Closed (P4 client-side exemplary)
+# Pattern: Letta Fail-Closed (P4 client-side: static implementation evidence)
 
 Source: `MAQS_Way/docs/audits/letta-way-audit.md`, code `letta-ai/letta-code @ cc4654a` (2026-10-14). Scope: MemFS client/harness only (`~/.letta/agents/{id}/memory/` git-backed Markdown). Server archival/recall closed — unjudged. Example only, NOT canon.
 
