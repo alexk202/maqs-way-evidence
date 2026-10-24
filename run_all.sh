@@ -1,14 +1,35 @@
 #!/usr/bin/env bash
 # Wired pipeline check: GREEN baseline + RED self-test + evaluator e2e in one command.
-# Inversion (Prima round 4 Q1): replay_red.py asserts rc==1 INSIDE and exits 0
+# Inversion (council round 4 Q1): replay_red.py asserts rc==1 INSIDE and exits 0
 # only if both REDs fired where expected. This script uses `set -u` (NOT -e):
 # expected REDs inside replay never kill the pipeline; a swallowed RED would
 # fail replay's asserts -> replay exits 1 -> `|| exit 1` below fails wired run.
 # Usage: ./run_all.sh [--maqs-way PATH]
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-MAQS_WAY="${MAQS_WAY:-/home/aleksandr/Projects/MAQS_Way}"
-for a in "$@"; do case "$a" in --maqs-way=*) MAQS_WAY="${a#*=}";; esac; done
+
+# Canon path resolution (no home paths): $MAQS_WAY, then sibling checkouts
+# ../maqs-way / ../MAQS_Way next to this repo. --maqs-way PATH and
+# --maqs-way=PATH both work; unknown args are an error, never ignored.
+MAQS_WAY="${MAQS_WAY:-}"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --maqs-way) [ $# -ge 2 ] || { echo "ERROR: --maqs-way needs a PATH argument" >&2; exit 2; }
+                MAQS_WAY="$2"; shift 2 ;;
+    --maqs-way=*) MAQS_WAY="${1#*=}"; shift ;;
+    *) echo "ERROR: unknown argument: $1 (supported: --maqs-way PATH | --maqs-way=PATH)" >&2; exit 2 ;;
+  esac
+done
+if [ -z "$MAQS_WAY" ]; then
+  for cand in "$HERE/../maqs-way" "$HERE/../MAQS_Way"; do
+    [ -f "$cand/schemas/maqs_way_audit.py" ] && MAQS_WAY="$cand" && break
+  done
+fi
+if [ -z "$MAQS_WAY" ] || [ ! -f "$MAQS_WAY/schemas/maqs_way_audit.py" ]; then
+  echo "ERROR: canon (maqs-way) not found: set MAQS_WAY or pass --maqs-way PATH" >&2
+  echo "  checked: env MAQS_WAY='${MAQS_WAY:-<unset>}', $HERE/../maqs-way, $HERE/../MAQS_Way" >&2
+  exit 2
+fi
 
 echo "== evidence: tool versions =="
 python3 -c "import sys,importlib.metadata as m; print('python', sys.version.split()[0], '| jsonschema', m.version('jsonschema'))"

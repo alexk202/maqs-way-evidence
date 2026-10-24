@@ -5,7 +5,7 @@ Status: draft for owner sanction. Location if sanctioned: canon-adjacent package
 ## Problem
 `owner`/`closes_in` in `b_write_integrity.json` / `c8_classes.json` known-gap entries are free text. `B4 → SPEC §2.5` passes the gate even as `SPEC §99` (verified by reading `check_b_coverage.py:71-77`, `check_c8_coverage.py:61-68`: owner presence checked, target existence not). Rules ARE resolved (`check_namespaces`, whitelist↔fixture lockstep); owners are not. Part of `declared 8/8` is decorative.
 
-## Options (price-tagged, per Prima round 3)
+## Options (price-tagged, per council round 3)
 
 | Mechanism | Essence | Price | Drift |
 |---|---|---|---|

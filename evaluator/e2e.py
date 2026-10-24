@@ -1,4 +1,4 @@
-"""Evaluator e2e (pre-registered, Prima round 4).
+"""Evaluator e2e (pre-registered, council round 4).
 
 Semantics (one sentence, decided BEFORE code): executed:true means "the
 checklist logic ran to completion in this environment"; pass/fail lives ONLY
@@ -13,7 +13,7 @@ Criteria:
      executed:false on a completed run, never GREEN on a failed run.
   5. WP5 map: every check carries how_to_verify {exec,cmd,expect}; exec cmds
      reference real canon scripts; non-exec are named debts; one mapped
-     command EXECUTES for real (map is not just text — Prima P3).
+     command EXECUTES for real (map is not just text — council P3).
 Stdlib only. Writes e2e-evidence.json next to this script.
 """
 import json
@@ -69,11 +69,21 @@ def main() -> int:
     debt_count = len(ver) - exec_count
     assert debt_count >= 1, "at least one named debt must stay honest (P6/P7)"
 
-    # WP5 smoke (Prima P3): the map is not just text — execute one mapped
+    # WP5 smoke (council P3): the map is not just text — execute one mapped
     # command for real. replay_vectors is the cheapest full-coverage probe.
     import os
     import subprocess
-    canon = Path(os.environ.get("MAQS_WAY", "/home/aleksandr/Projects/MAQS_Way"))
+    canon = None
+    env_canon = os.environ.get("MAQS_WAY", "").strip()
+    _here = Path(__file__).resolve().parent.parent
+    for _c in ([env_canon] if env_canon else []) + [str(_here.parent / s)
+                                                    for s in ("maqs-way", "MAQS_Way")]:
+        if Path(_c, "schemas", "replay_vectors.py").is_file():
+            canon = Path(_c)
+            break
+    assert canon is not None, (
+        "canon (maqs-way) not found: set MAQS_WAY or place the checkout as a "
+        "sibling (../maqs-way or ../MAQS_Way)")
     p = subprocess.run([sys.executable, str(canon / "schemas" / "replay_vectors.py")],
                        capture_output=True, text=True, timeout=300)
     assert p.returncode == 0 and "REPLAY GREEN" in p.stdout, \

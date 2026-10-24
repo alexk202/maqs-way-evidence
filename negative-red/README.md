@@ -1,4 +1,4 @@
-# Negative RED fixtures — detector self-test (Prima round 2)
+# Negative RED fixtures — detector self-test (council round 2)
 
 `baseline-audit-20261016.json` proves the gate passes good input.
 This dir proves it rejects bad input. Together = validated detector, not faith.
