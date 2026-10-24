@@ -40,9 +40,6 @@ def default_canon() -> Path:
              + ", ".join(str(PIPE.parent.parent / s) for s in _SIBLINGS))
 
 
-DEFAULT_CANON = default_canon()
-
-
 def run(cmd, **kw):
     p = subprocess.run(cmd, capture_output=True, text=True, **kw)
     return p.returncode, p.stdout + p.stderr
@@ -57,9 +54,9 @@ def fresh_copy(src: Path) -> Path:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--maqs-way", default=str(DEFAULT_CANON))
+    ap.add_argument("--maqs-way", default=None)  # lazy: sibling/env only if arg absent
     args = ap.parse_args()
-    canon = Path(args.maqs_way)
+    canon = Path(args.maqs_way) if args.maqs_way else default_canon()
     audit = canon / "schemas" / "maqs_way_audit.py"
     assert audit.exists(), f"no audit CLI at {audit}"
 
