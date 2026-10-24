@@ -39,9 +39,9 @@ I'm the author. I audited three open-source memory systems (Mem0, Graphiti, Lett
 
 Static code reading, every claim pinned to a commit and file:line so links can't rot and claims are falsifiable.
 
-Mem0 OSS: tenant isolation done right. A tenant filter is required on every search and applied BEFORE top-k, identity keys are stripped from user metadata so tenants can't be spoofed. Weaker side: deleted memories stay queryable through the history table, no tombstone.
+Mem0 OSS: static implementation evidence for tenant isolation (we ran nothing): a tenant filter is required on every search and applied BEFORE top-k, identity keys are stripped from user metadata so tenants can't be spoofed. Weaker side: deleted memories stay queryable through the history table, no tombstone.
 
-Graphiti: contradiction handling is exemplary. Old edges are retained with expired_at instead of deleted, so "what did I believe back then" stays answerable. Weaker side: unscoped search is allowed by default.
+Graphiti: contradiction handling done right in code (same static-reading status). Old edges are retained with expired_at instead of deleted, so "what did I believe back then" stays answerable. Weaker side: unscoped search is allowed by default.
 
 Letta (MemFS client scope only): fail-closed by construction. Per-agent roots, symlink-resolved containment, default-deny writes. Server side is closed source and unjudged.
 

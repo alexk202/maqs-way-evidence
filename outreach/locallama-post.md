@@ -19,7 +19,7 @@ There's a bug class that looks like a "model hallucination problem" but is actua
 
 **The bug.** A vector store search applied the tenant filter AFTER the top-k retrieval. So when User B asked a question, the search first picked the nearest chunks from the whole index (including User A's memories), and only then tried to filter them by tenant — which dropped legit results and sometimes left User A's private memory visible to User B. From the outside it looks like your model is leaking or hallucinating. It's not the model. It's the retrieval order.
 
-**The fix pattern (before top-k, not after).** We audited three open-source memory systems against our checklist (8 principles, written as verifiable properties) and one of them — Mem0 OSS — gets isolation right in a way worth copying:
+**The fix pattern (before top-k, not after).** We audited three open-source memory systems against our checklist (8 principles, written as verifiable properties) and one of them — Mem0 OSS — wires the isolation pattern right in code (our audit is static reading; nothing was run), worth copying:
 
 - it REQUIRES a tenant filter (`user_id` / `agent_id` / `run_id`) on search — no filter, no query, it throws;
 - the filter goes into the vector-store query BEFORE top-k;

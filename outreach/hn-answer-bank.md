@@ -53,7 +53,7 @@ A: Fair. It is a binomial Wilson interval over 500 independent items, [0.980,0.9
 ## C. Вендоры, сравнения, ранжирование
 
 ### C1. «Ты ранжируешь Mem0/Graphiti/Letta? Кто лучше?»
-A: No ranking, and the scopes are not the same, so a ranking would be fake precision. Mem0 OSS: tenant isolation done right, weaker on deletion tombstones. Graphiti: contradiction handling exemplary, weaker on default scoping. Letta: fail-closed by construction in the client scope only; the server is closed source and unjudged. Different designs, different boundaries.
+A: No ranking, and the scopes are not the same, so a ranking would be fake precision. Mem0 OSS: tenant isolation reads right in code (static evidence, behavioral run pending), weaker on deletion tombstones. Graphiti: contradiction handling reads right in code (same status), weaker on default scoping. Letta: fail-closed by construction in the client scope only; the server is closed source and unjudged. Different designs, different boundaries.
 
 ### C2. «Ты вообще связывался с командами?»
 A: Yes, before posting. Mem0 and Letta were contacted directly, and the Graphiti contact is public: https://github.com/alexk202/maqs-way/issues/3 — an open invitation in their tracker. I do not put words in their mouths; the repo is the door.

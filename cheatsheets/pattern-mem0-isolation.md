@@ -1,6 +1,6 @@
-# Pattern: Mem0 Isolation (P4 exemplary)
+# Pattern: Mem0 Isolation (P4: static implementation evidence; behavioral verification pending)
 
-Source: `MAQS_Way/docs/audits/mem0-way-audit.md`, code `mem0ai/mem0 @ 0724291` (2026-10-14). Example only, NOT canon. P4 verdict in audit: COVERED.
+Source: `MAQS_Way/docs/audits/mem0-way-audit.md`, code `mem0ai/mem0 @ 0724291` (2026-10-14). Example only, NOT canon. P4 verdict in audit: static implementation evidence; behavioral verification pending (relabeled 2026-10-24 per the MAQS glossary terms, external reviewer feedback; maqs-way 469e237).
 
 ## What to copy
 1. Require tenant filter: `search/get_all` demand `user_id|agent_id|run_id`, else `ValueError` (`mem0/memory/main.py:1471-1475`).
