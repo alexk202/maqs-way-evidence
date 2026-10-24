@@ -15,14 +15,20 @@ Companion repo for [MAQS-Way v0.2](https://github.com/alexk202/maqs-way) — the
 
 ## Wired check (one command)
 ```
-./run_all.sh [--maqs-way PATH]
+./run_all.sh [--maqs-way PATH]        # or: --maqs-way=PATH
 ```
-Canon GREEN → RED self-test (detector must fail where expected) → pipeline shapes → evaluator e2e. Exit 0 only if green **and** red branches all behave. Runs in CI: [`.github/workflows/pipeline.yml`](.github/workflows/pipeline.yml) — green on the real Actions runner (python 3.12.3, jsonschema 4.10.3).
+Canon GREEN → RED self-test (detector must fail where expected) → pipeline shapes → evaluator e2e. Exit 0 only if green **and** red branches all behave. Unknown arguments are an error, never silently ignored. Canon path: `$MAQS_WAY`, else a sibling checkout (`../maqs-way` / `../MAQS_Way`), else a clear error — no home paths. Runs in CI: [`.github/workflows/pipeline.yml`](.github/workflows/pipeline.yml) — green on the real Actions runner (python 3.12.3, jsonschema 4.10.3).
 
-## Status (2026-10-17)
-- Canon gate: GATE GREEN — schema 4/4 + manifest 12/12 + replay-vectors 8/8 + scoreboard 24/24 + canon-pin + namespaces
-- Measured (WP2): evidence-R@5 = 0.98 stratified-50 / 1.00 temporal-50, single-point, pre-registered — [evals/prereg-v03.md](https://github.com/alexk202/maqs-way/blob/main/evals/prereg-v03.md) in canon
-- NOT claimed: §3.2 normative thresholds (single-point ≠ normative; needs a second system or full haystack)
+## Name guard
+After cloning: `git config core.hooksPath .githooks` — pre-commit + commit-msg scan staged files / the commit message with the canon's name-leak pattern ([maqs-way/.githooks/name_guard.py](https://github.com/alexk202/maqs-way/blob/main/.githooks/name_guard.py), single source — this repo's [`.githooks/name_guard.py`](.githooks/name_guard.py) only imports it; fail-closed if the canon checkout is not found).
+
+## Status (2026-10-24)
+- Canon gate (as the canon prints it today): **GATE GREEN** — `schema 4/4 + manifest 12/12 + declared 8/8 + executed (canon-pin) 1/1 + replay-vectors 8/8 + scoreboard 24/24 + namespaces ok`; `name policy: 0 leaks in tracked files -- GREEN (bound to MAQS_Way, any cwd)`; open gaps stay enumerated, not folded (B4 → owner SPEC §2.5; I11 bridge)
+- Measured (WP2): full-500 evidence-R@5 = **0.992** (496/500, Wilson [0.980, 0.997], within pre-registered [0.90, 1.00]) — artifact: [evals/results/pilot_evidence_n500.json](https://github.com/alexk202/maqs-way/blob/main/evals/results/pilot_evidence_n500.json) in canon
+- Three framework audits: [Mem0](https://github.com/alexk202/maqs-way/blob/main/docs/audits/mem0-way-audit.md) / [Graphiti](https://github.com/alexk202/maqs-way/blob/main/docs/audits/graphiti-way-audit.md) / [Letta](https://github.com/alexk202/maqs-way/blob/main/docs/audits/letta-way-audit.md) — `docs/audits/` in canon
+- Reproduction: [maqs-way/evals/REPRODUCE.md §8](https://github.com/alexk202/maqs-way/blob/main/evals/REPRODUCE.md) — the external reproduction protocol (failed attempts recorded same as successful)
+- Discussion: [alexk202/maqs-way discussion #1](https://github.com/alexk202/maqs-way/discussions/1)
+- NOT claimed: §3.2 normative thresholds (gates stay per-deployment candidates, not norms; needs a second system)
 
 ## Rule
 Every artifact here is **derived**. Nothing silently rewrites canon: proposals wait for owner signature, measurements carry provenance, outreach stays `drafts only, do not auto-post`.
