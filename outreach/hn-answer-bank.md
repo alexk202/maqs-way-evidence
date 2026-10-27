@@ -67,7 +67,7 @@ A: Because they are the three most-adopted open memory layers and they are audit
 ## D. Понятия и канон
 
 ### D1. «MAQS vs Way — в чём разница?»
-A: One line: MAQS audits that a mechanism exists; Way proves it works. MAQS is the static audit core (v1.6). Way is the layer that makes it falsifiable — declared vectors get replayed, and a metric has to move, not just a checkbox.
+A: One line: MAQS audits that a mechanism exists; Way proves it works. MAQS is the static audit core (v1.8.1). Way is the layer that makes it falsifiable — declared vectors get replayed, and a metric has to move, not just a checkbox.
 
 ### D2. «Что именно запускает `maqs_way_audit.py all`?»
 A: One command replays: schema 4/4, manifest 12/12, namespace checks, a canon pin (similarity 0.3 against SPEC section 3.3), an executable replay of all eight declared negative vectors reported as caught/missed/error and never merged, and a 24-row scoreboard of every audit claim. It ends on a single gate verdict, not a pile of green checkmarks.

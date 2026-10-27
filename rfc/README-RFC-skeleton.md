@@ -1,6 +1,6 @@
 # MAQS-Way v0.2 — Request for Comments (skeleton, Phase 4.3)
 
-Status: experimental minor v0.2 (2026-10-15). Data model frozen: `way-v0.1.3` (`omps-0.1.0+way-v0.1.3`). Audit core: MAQS v1.6. License: Apache-2.0.
+Status: experimental minor v0.2 (2026-10-15). Data model frozen: `way-v0.1.3` (`omps-0.1.0+way-v0.1.3`). Audit core: MAQS v1.8.1. License: Apache-2.0.
 
 ## 0. Summary (TODO: 5 lines)
 Way = common path policy→implementation. MAQS checks mechanism exists, Way proves it works.
