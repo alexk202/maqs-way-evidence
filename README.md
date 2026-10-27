@@ -37,3 +37,5 @@ After cloning: `git config core.hooksPath .githooks` — pre-commit + commit-msg
 
 ## Rule
 Every artifact here is **derived**. Nothing silently rewrites canon: proposals wait for owner signature, measurements carry provenance, outreach stays `drafts only, do not auto-post`.
+
+License: Apache-2.0 (see LICENSE)
