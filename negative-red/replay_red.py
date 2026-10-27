@@ -11,8 +11,11 @@ Checks:
      -> `manifest` exit 1, output contains 'orphan'
   3. RED-pindrift: fixture invalid/005 similarity 0.3 -> 0.99
      -> `pin` exit 1 ('drift'), `all` -> GATE RED exit 1
-  4. RED-dangling: B4 owner 'SPEC §2.5' -> 'SPEC §99'
-     -> `coverage` exit 1 ('dangling'), `all` -> GATE RED exit 1
+  4. RED-unknown-rules: B4 rules ["MAQS:B4"] -> ["MAQS:B99"]
+      -> `coverage` exit 1 ('unknown'), `all` -> GATE RED exit 1
+      (v0.3 adaptation: B4 is COVERED since maqs-way 9f18082, the
+      dangling-owner fault class has no fixture entries left -- all 12
+      gaps closed; the adversarial check is now an unknown-rule reference)
 """
 import argparse
 import json
@@ -96,13 +99,13 @@ def main() -> int:
         bp = c4 / "schemas" / "b_write_integrity.json"
         b = json.loads(bp.read_text())
         b4 = next(c for c in b if c["id"] == "B4")
-        assert b4["owner"] == "SPEC §2.5", f"canon moved: {b4['owner']!r}"
-        b4["owner"] = "SPEC §99"
+        assert b4["rules"] == ["MAQS:B4"], f"canon moved: {b4['rules']!r}"
+        b4["rules"] = ["MAQS:B99"]
         bp.write_text(json.dumps(b, indent=2, ensure_ascii=False))
         rc, out = run([sys.executable, str(c4 / "schemas" / "maqs_way_audit.py"),
                        "coverage", "--format", "text"])
-        assert rc == 1 and "dangling" in out.lower(), f"RED-dangling failed:\n{out}"
-        print("RED-dangling: exit 1, owner 'SPEC §99' resolves to nothing")
+        assert rc == 1 and "unknown" in out.lower(), f"RED-unknown failed:\n{out}"
+        print("RED-unknown-rules: exit 1, 'MAQS:B99' resolves to nothing")
     finally:
         shutil.rmtree(c4.parent, ignore_errors=True)
 
