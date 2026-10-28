@@ -23,6 +23,7 @@ Source: `MAQS_Way/docs/audits/mem0-way-audit.md`, code `mem0ai/mem0 @ 0724291` (
 ## Update 2026-10-26 (append-only): behavioral verification EXECUTED and PASSED
 
 **Verdict: verified on mem0@0724291b, Linux CPU-only stub stand.**
+Scope of "verified" (2026-10-28, mirrors the audit): retrieval isolation on read paths (scope keys) only; case classes (1)(3)(4) not run, omitted scope static only — see the audit "Done well" item 1.
 Evidence: [MAQS_Way/evals/results/p4_mem0_isolation_report.json](https://github.com/alexk202/maqs-way/blob/v0.3/evals/results/p4_mem0_isolation_report.json)
 — the P4 behavioral test ([design](https://github.com/alexk202/maqs-way/blob/main/proposals/p4-mem0-behavioral-isolation.md),
 owner-sanctioned run). All three scope keys (`user_id`/`agent_id`/`run_id`) × all read
