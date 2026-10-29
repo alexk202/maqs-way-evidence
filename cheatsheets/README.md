@@ -1,6 +1,6 @@
 # Cheatsheets — index (Phase 1.1)
 
-Derived packaging. Canon stays in `MAQS_Way/`: `SPEC.md` v0.2, `maqs-way-standard.json` v0.2.0, model `way-v0.1.3` (`omps-0.1.0+way-v0.1.3`), MAQS v1.8.1.
+Derived packaging. Canon stays in `MAQS_Way/`: `SPEC.md` v0.3, `maqs-way-standard.json` v0.3.0, model `way-v0.1.3` (`omps-0.1.0+way-v0.1.3`), MAQS v1.8.1.
 
 ## Files
 - `P1-P8-cheatsheet.md` — 8 principles: Property / Verification / Example + MAQS link.

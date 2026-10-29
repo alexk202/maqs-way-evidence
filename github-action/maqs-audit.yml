@@ -6,15 +6,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # Option A: use published action (after marketplace publish)
-      # - uses: your-org/maqs-way-audit@v0.2
+      # - uses: your-org/maqs-way-audit@v0.3
       #   with:
-      #     maqs_way_ref: v0.2
+      #     maqs_way_ref: v0.3
       #     command: all
       #     format: text
       # Option B (no tail, works today): pin canon + run directly
       - uses: actions/checkout@v4
         with:
           repository: alexk202/MAQS_Way
-          ref: v0.2
+          ref: v0.3
           path: _maqs_way
       - run: python3 _maqs_way/schemas/maqs_way_audit.py all --format text

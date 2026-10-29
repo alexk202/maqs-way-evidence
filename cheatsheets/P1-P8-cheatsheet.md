@@ -1,6 +1,6 @@
 # MAQS-Way P1–P8 — Cheatsheet (derived, not canon)
 
-**Canon:** `MAQS_Way/SPEC.md` v0.2 (2026-10-15), `maqs-way-standard.json` v0.2.0, data model `way-v0.1.3` frozen (`omps-0.1.0+way-v0.1.3`). Audit core: MAQS v1.8.1.
+**Canon:** `MAQS_Way/SPEC.md` v0.3 (2026-10-27), `maqs-way-standard.json` v0.3.0, data model `way-v0.1.3` frozen (`omps-0.1.0+way-v0.1.3`). Audit core: MAQS v1.8.1.
 **Status of this file:** derived packaging for engineers. Normative thresholds = SPEC §3.2 + JSON `verification_suite.metrics`. All thresholds indicative until first real run.
 
 Formula: MAQS = audit that mechanism exists. Way = prove it works.

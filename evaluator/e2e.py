@@ -32,7 +32,7 @@ def build_manifest(checks, executed):
                else "SELF-DECLARED RED (not verified) \u2014 see unchecked")
     return {
         "schema_version": "omps-0.1.0+way-v0.1.3",
-        "standard": "maqs-way v0.2.0",
+        "standard": "maqs-way v0.3.0",
         "status": "self-declared",
         "executed": executed,
         "checks": [{"id": i, "rule": r, "passed": p} for i, r, p in checks],

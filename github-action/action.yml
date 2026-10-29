@@ -1,13 +1,13 @@
 name: "MAQS-Way Audit"
-description: "Replay MAQS-Way canon self-checks. Release v0.2 = rules/audit code; model way-v0.1.3 (omps-0.1.0+way-v0.1.3) = frozen data-model version checked at runtime."
+description: "Replay MAQS-Way canon self-checks. Release v0.3 = rules/audit code; model way-v0.1.3 (omps-0.1.0+way-v0.1.3) = frozen data-model version checked at runtime."
 branding:
   icon: "shield"
   color: "green"
 inputs:
   maqs_way_ref:
-    description: "MAQS_Way git ref: rules release to replay. Use tag or SHA (e.g. v0.2), NOT a branch — branches break reproducibility."
+    description: "MAQS_Way git ref: rules release to replay. Use tag or SHA (e.g. v0.3), NOT a branch — branches break reproducibility."
     required: false
-    default: "v0.2"
+    default: "v0.3"
   command:
     description: "Audit subcommand: all|schema|manifest|lint|coverage|namespaces|pin"
     required: false
@@ -48,8 +48,8 @@ runs:
         set +e
         python3 "${GITHUB_WORKSPACE}/_maqs_way/schemas/maqs_way_audit.py" "${{ inputs.command }}" --format "${{ inputs.format }}" | tee "$OUT"
         RC=${PIPESTATUS[0]}
-        # Real check (not echo): model frozen at way-v0.1.3, release stamp v0.2.0. Drift = RED.
-        python3 -c "import json; v=json.load(open('${GITHUB_WORKSPACE}/_maqs_way/conformance/valid/001-minimal-preference.omps.json')); assert v['schema_version']=='omps-0.1.0+way-v0.1.3', v['schema_version']; s=json.load(open('${GITHUB_WORKSPACE}/_maqs_way/maqs-way-standard.json')); assert s['version']=='0.2.0', s['version']; print('model+release pin OK: omps-0.1.0+way-v0.1.3 / 0.2.0')"
+        # Real check (not echo): model frozen at way-v0.1.3, release stamp v0.3.0. Drift = RED.
+        python3 -c "import json; v=json.load(open('${GITHUB_WORKSPACE}/_maqs_way/conformance/valid/001-minimal-preference.omps.json')); assert v['schema_version']=='omps-0.1.0+way-v0.1.3', v['schema_version']; s=json.load(open('${GITHUB_WORKSPACE}/_maqs_way/maqs-way-standard.json')); assert s['version']=='0.3.0', s['version']; print('model+release pin OK: omps-0.1.0+way-v0.1.3 / 0.3.0')"
         RC2=$?
         if [ $RC -eq 0 ] && [ $RC2 -eq 0 ]; then VERDICT="GATE GREEN"; FINAL=0; else VERDICT="GATE RED"; FINAL=1; fi
         echo "verdict=$VERDICT" >> "$GITHUB_OUTPUT"
